@@ -32,6 +32,45 @@
       </div>
     </div>
   </div>
+  <p-accordion value="0">
+    <p-accordion-panel value="0">
+      <p-accordion-header>"Users Module"</p-accordion-header>
+      <p-accordion-content>
+        <p class="m-0">
+        The Users module allows you to manage all users registered in the system.
+        You can view user details such as name, email, mobile number, company, and status.
+        Data is fetched in real-time from the backend using REST APIs. This section displays
+        users grouped by company, enabling easy navigation and quick access.
+        </p>
+      </p-accordion-content>
+    </p-accordion-panel>
+  
+    <p-accordion-panel value="1">
+      <p-accordion-header> "Company Module"</p-accordion-header>
+      <p-accordion-content>
+        <p class="m-0">
+          The Company module displays the complete list of companies along with their
+          contact information. When you select a company, you can view all users
+          associated with that company. The details include company name, code,
+          email, mobile number, and contact person. This module helps maintain
+          organized company–user relationships.
+        </p>
+      </p-accordion-content>
+    </p-accordion-panel>
+  
+    <p-accordion-panel value="2">
+      <p-accordion-header> "Upload Module"</p-accordion-header>
+      <p-accordion-content>
+        <p class="m-0">
+            The Upload module is used to upload and manage files within the system.
+            Uploaded files are processed and stored in the server with secure handling.
+            You can view uploaded file lists, check their update time, and manage them
+            efficiently. This module is directly connected with the backend using
+            Express and Sequelize.
+        </p>
+      </p-accordion-content>
+    </p-accordion-panel>
+  </p-accordion>
 
   <!-- Quick Links -->
   <div class="quick-links">

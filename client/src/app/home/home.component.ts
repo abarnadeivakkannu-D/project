@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { AccordionModule } from 'primeng/accordion';
+import { ButtonModule } from 'primeng/button';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  imports: [
+    AccordionModule,
+    ButtonModule
+  ]
+  
 })
 export class HomeComponent implements OnInit {
   user: any=null;
