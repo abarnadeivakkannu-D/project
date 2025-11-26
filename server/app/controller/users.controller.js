@@ -1,11 +1,18 @@
 import db from "../config/db.config.js";
-import { Op } from "sequelize";
+import {
+  Op
+} from "sequelize";
 
 const users = db.users;
 
-
+// =============================
+// LOGIN
+// =============================
 export const loginUser = async (req, res) => {
-  const { username, password } = req.body;
+  const {
+    username,
+    password
+  } = req.body;
 
   if (!username || !password) {
     return res.status(400).json({
@@ -19,9 +26,11 @@ export const loginUser = async (req, res) => {
   try {
     const user = await users.findOne({
       where: {
-       name: username,
+        name: username,
         password,
-        status: { [Op.in]: [0, 1] }, 
+        status: {
+          [Op.in]: [0, 1]
+        },
       },
       transaction: t,
     });
@@ -29,11 +38,12 @@ export const loginUser = async (req, res) => {
     await t.commit();
 
     if (user) {
-      const userData = user.get({ plain: true });
       return res.status(200).json({
         status: 200,
         reason: "Login successful",
-        results: user.get({plain: true}),
+        results: user.get({
+          plain: true
+        }),
       });
     } else {
       return res.status(404).json({
@@ -51,6 +61,9 @@ export const loginUser = async (req, res) => {
   }
 };
 
+// =============================
+// GET ALL USERS
+// =============================
 export const getAllUsers = async (req, res) => {
   console.log("Inside getAllUsers");
 
@@ -60,63 +73,89 @@ export const getAllUsers = async (req, res) => {
     const queryRes = await users.findAll({
       where: {
         status: {
-          [Op.in]: [0, 1],
+          [Op.in]: [0, 1]
         },
       },
       transaction: t,
     });
 
-    const userData = queryRes.map((user) => user.get({ plain: true }));
-    console.log("fetched users:", userData.map((u)=>({id: u.id })));
+    const userData = queryRes.map((user) => user.get({
+      plain: true
+    }));
+    console.log("fetched users:", userData.map((u) => ({
+      id: u.id
+    })));
 
     await t.commit();
 
     if (userData.length > 0) {
-      res.json({ status: 200, reason: "Success", results: userData });
+      res.json({
+        status: 200,
+        reason: "Success",
+        results: userData
+      });
     } else {
-      res.status(404).json({ status: 404, reason: "No data found", results: [] });
+      res
+        .status(404)
+        .json({
+          status: 404,
+          reason: "No data found",
+          results: []
+        });
     }
   } catch (err) {
     await t.rollback();
     console.error("Error fetching users:", err);
-    res.status(500).json({ status: 500, reason: "Error fetching users", results: [] });
+    res
+      .status(500)
+      .json({
+        status: 500,
+        reason: "Error fetching users",
+        results: []
+      });
   }
 };
 
+// =============================
+// ADD USER
+// =============================
 export const addUser = async (req, res) => {
   const t = await db.sequelize.transaction();
 
   try {
-    const { name, email, password, status } = req.body;
+    const {
+      name,
+      email,
+      password,
+      status
+    } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
         status: 400,
         reason: "Name, email, and password are required",
-        results: []
+        results: [],
       });
     }
 
-    const newUser = await users.create(
-      {
-        name,
-        email,
-        password,
-        status: status ?? 0, 
-      },
-      { transaction: t }
-    );
+    const newUser = await users.create({
+      name,
+      email,
+      password,
+      status: status ?? 0,
+    }, {
+      transaction: t
+    });
 
     await t.commit();
-
-    const userData = newUser.get({ plain: true });
 
     return res.status(201).json({
       status: 201,
       reason: "User created successfully",
-      results: userData
+      results: newUser.get({
+        plain: true
+      }),
     });
-
   } catch (err) {
     await t.rollback();
     console.error("Error creating user:", err);
@@ -125,34 +164,44 @@ export const addUser = async (req, res) => {
       return res.status(409).json({
         status: 409,
         reason: "A user with this email already exists",
-        results: []
+        results: [],
       });
     }
 
     return res.status(500).json({
       status: 500,
       reason: "Error creating user",
-      results: []
+      results: [],
     });
   }
 };
 
-
-
+// =============================
+// UPDATE USER
+// =============================
 export const updateUser = async (req, res) => {
-  const { id } = req.params;
+  const {
+    id
+  } = req.params;
   const updateData = req.body;
 
   const t = await db.sequelize.transaction();
   try {
-    const user = await users.findByPk(id, { transaction: t });
+    const user = await users.findByPk(id, {
+      transaction: t
+    });
 
     if (!user) {
       await t.commit();
-      return res.status(404).json({ status: 404, reason: "User not found" });
+      return res.status(404).json({
+        status: 404,
+        reason: "User not found"
+      });
     }
 
-    await user.update(updateData, { transaction: t });
+    await user.update(updateData, {
+      transaction: t
+    });
     await t.commit();
 
     res.json({
@@ -163,54 +212,118 @@ export const updateUser = async (req, res) => {
   } catch (err) {
     await t.rollback();
     console.error("Error updating user:", err);
-    res.status(500).json({ status: 500, reason: "Error updating user" });
+    res.status(500).json({
+      status: 500,
+      reason: "Error updating user"
+    });
   }
 };
 
-
+// =============================
+// DELETE USER
+// =============================
 export const deleteUser = async (req, res) => {
-  const { id } = req.params;
+  const {
+    id
+  } = req.params;
 
   const t = await db.sequelize.transaction();
   try {
-    const user = await users.findByPk(id, { transaction: t });
+    const user = await users.findByPk(id, {
+      transaction: t
+    });
 
     if (!user) {
       await t.commit();
-      return res.status(404).json({ status: 404, reason: "User not found" });
+      return res.status(404).json({
+        status: 404,
+        reason: "User not found"
+      });
     }
 
-    await user.destroy({ transaction: t });
+    await user.destroy({
+      transaction: t
+    });
     await t.commit();
 
-    res.json({ status: 200, reason: "User deleted successfully" });
+    res.json({
+      status: 200,
+      reason: "User deleted successfully"
+    });
   } catch (err) {
     await t.rollback();
     console.error("Error deleting user:", err);
-    res.status(500).json({ status: 500, reason: "Error deleting user" });
+    res
+      .status(500)
+      .json({
+        status: 500,
+        reason: "Error deleting user"
+      });
   }
 };
- export const uploadBranch = async (req, res) => {
-   try {
-     if (!req.file) {
-       return res.status(400).json({
-         status: 400,
-         reason: "No file uploaded"
-       });
-     }
 
-     return res.status(200).json({
-       status: 200,
-       reason: "File uploaded successfully",
-       fileName: req.file.filename,
-       filePath: req.file.path
-     });
+// =============================
+// FILE UPLOAD
+// =============================
+export const uploadBranch = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        status: 400,
+        reason: "No file uploaded",
+      });
+    }
 
-   } catch (error) {
-     console.error("Upload error:", error);
-     return res.status(500).json({
-       status: 500,
-       reason: "Server error during file upload"
-     });
-   }
- };
+    return res.status(200).json({
+      status: 200,
+      reason: "File uploaded successfully",
+      fileName: req.file.filename,
+      filePath: req.file.path,
+    });
+  } catch (error) {
+    console.error("Upload error:", error);
+    return res.status(500).json({
+      status: 500,
+      reason: "Server error during file upload",
+    });
+  }
+};
+
+// =============================
+// PAGINATION (NEW CODE ADDED)
+// =============================
+export const getPaginatedUsers = async (req, res) => {
+  try {
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+
+    let offset = (page - 1) * limit;
+
+    const {
+      count,
+      rows
+    } = await users.findAndCountAll({
+      where: {
+        status: {
+          [Op.in]: [0, 1]
+        },
+      },
+      offset: offset,
+      limit: limit,
+    });
+
+    return res.json({
+      status: 200,
+      total: count,
+      page: page,
+      limit: limit,
+      users: rows,
+    });
+  } catch (error) {
+    console.error("Pagination error:", error);
+    return res.status(500).json({
+      status: 500,
+      reason: "Error fetching paginated users",
+    });
+  }
+};

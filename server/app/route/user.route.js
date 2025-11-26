@@ -4,14 +4,23 @@ import {
     getAllUsers,
     addUser,
     updateUser,
-    deleteUser
+    deleteUser,
+     getPaginatedUsers
 } from "../controller/users.controller.js";
-const router = express.Router(); 
-// Auth
- router.post("/login", loginUser); // Users 
- router.get("/", getAllUsers); // GET all users 
- router.post("/", addUser);// ADD user 
- router.put("/:id", updateUser); // UPDATE user
- router.delete("/:id", deleteUser); // DELETE user 
-   
- export default router;
+
+import db from "../config/db.config.js";
+const Users = db.users;
+
+const router = express.Router();
+
+// =====================================
+// AUTH
+// =====================================
+router.post("/login", loginUser);
+router.get("/paginate", getPaginatedUsers);
+router.get("/", getAllUsers); // GET all users (no pagination)
+router.post("/", addUser); // ADD user
+router.put("/:id", updateUser); // UPDATE user
+router.delete("/:id", deleteUser); // DELETE user
+
+export default router;

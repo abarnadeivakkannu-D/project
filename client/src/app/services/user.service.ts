@@ -7,27 +7,23 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
 
-    private baseUrl = 'http://localhost:3000/api/users';
+    private apiUrl = 'http://localhost:3000/api/users';
 
     constructor(private http: HttpClient) { }
 
-    // GET all users
-    getAllUsers(): Observable<any[]> {
-        return this.http.get<any[]>(this.baseUrl);
+    getUsers(page: number, limit: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/paginate?page=${page}&limit=${limit}`);
     }
 
-    // ADD user
-    addUser(data: any): Observable<any> {
-        return this.http.post(this.baseUrl, data);
+    createUser(data: any): Observable<any> {
+        return this.http.post(this.apiUrl, data);
     }
 
-    // UPDATE user
     updateUser(id: number, data: any): Observable<any> {
-        return this.http.put(`${this.baseUrl}/${id}`, data);
+        return this.http.put(`${this.apiUrl}/${id}`, data);
     }
 
-    // DELETE user
     deleteUser(id: number): Observable<any> {
-        return this.http.delete(`${this.baseUrl}/${id}`);
+        return this.http.delete(`${this.apiUrl}/${id}`);
     }
 }

@@ -1,22 +1,15 @@
 <div class="home-container">
+
   <h4>Users List</h4>
 
   <!-- Add User Button -->
   <div style="text-align: right; margin-bottom: 20px;">
-    <button 
-      pButton 
-      label="Add User" 
-      icon="pi pi-user-plus"
-      class="p-button-success"
-      (click)="openCreateDialog()">
+    <button pButton label="Add User" icon="pi pi-user-plus" class="p-button-success" (click)="openCreateDialog()">
     </button>
   </div>
 
   <!-- USERS TABLE -->
-  <p-table 
-    [value]="users"
-    [loading]="loading"
-    class="p-datatable-striped p-datatable-gridlines">
+  <p-table [value]="users" [loading]="loading" class="p-datatable-striped p-datatable-gridlines">
 
     <ng-template pTemplate="header">
       <tr>
@@ -34,21 +27,14 @@
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.status === 1 ? 'Active' : 'Inactive' }}</td>
+
         <td>
           <div style="display: flex; gap: 10px;">
-            <button 
-              pButton 
-              label="Edit"
-              icon="pi pi-pencil" 
-              class="p-button-sm p-button-rounded p-button-info"
+            <button pButton label="Edit" icon="pi pi-pencil" class="p-button-sm p-button-rounded p-button-info"
               (click)="openEditDialog(user)">
             </button>
 
-            <button 
-              pButton 
-              label="Delete"
-              icon="pi pi-trash"
-              class="p-button-sm p-button-rounded p-button-danger"
+            <button pButton label="Delete" icon="pi pi-trash" class="p-button-sm p-button-rounded p-button-danger"
               (click)="deleteUser(user.id)">
             </button>
           </div>
@@ -58,20 +44,23 @@
 
   </p-table>
 
+  <!-- NO USERS FOUND -->
   <div *ngIf="!loading && users.length === 0">
     No users found.
   </div>
+
+  <!-- PAGINATOR ADDED HERE -->
+  <p-paginator [rows]="limit" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]"
+    (onPageChange)="onPageChange($event)">
+  </p-paginator>
+
 </div>
 
 <!-- CREATE/EDIT USER DIALOG -->
-<p-dialog 
-  header="{{ isEditMode ? 'Edit User' : 'Add User' }}" 
-  [(visible)]="displayUserDialog" 
-  [modal]="true" 
-  [style]="{width: '400px'}">
+<p-dialog header="{{ isEditMode ? 'Edit User' : 'Add User' }}" [(visible)]="displayUserDialog" [modal]="true"
+  [style]="{ width: '400px' }">
 
   <div class="p-fluid">
-
     <div class="field mb-3">
       <label>Name</label>
       <input pInputText [(ngModel)]="userFormData.name" />
@@ -86,25 +75,14 @@
       <label>Password</label>
       <input pInputText type="password" [(ngModel)]="userFormData.password" />
     </div>
-
   </div>
 
   <ng-template pTemplate="footer">
-
-    <button 
-      pButton 
-      label="Cancel" 
-      class="p-button-text"
-      (click)="displayUserDialog = false">
+    <button pButton label="Cancel" class="p-button-text" (click)="displayUserDialog = false">
     </button>
 
-    <button 
-      pButton 
-      label="Save" 
-      icon="pi pi-check"
-      (click)="saveUser()">
+    <button pButton label="Save" icon="pi pi-check" (click)="saveUser()">
     </button>
-
   </ng-template>
 
 </p-dialog>
