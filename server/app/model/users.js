@@ -1,5 +1,3 @@
-import { DataTypes } from 'sequelize';
-
 export default (sequelize, DataTypes) => {
   return sequelize.define('users', {
     id: {
@@ -25,9 +23,17 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0
+    },
+    company_id: {
+      type: DataTypes.INTEGER, // Use DataTypes.INTEGER
+      allowNull: false,
+      references: { // lowercase
+        model: 'company', // table name (not model variable)
+        key: 'company_id' // referenced column
+      }
     }
   }, {
-    tableName: 'users',
+    tableName: 'users', 
     timestamps: false
   });
 };

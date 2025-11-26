@@ -1,0 +1,88 @@
+/* dashboard.component.css or company-list.component.css */
+
+/* Table general styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Table headers */
+th {
+  background-color: #103c7b;
+  color: #fff;
+  text-align: left;
+  padding: 12px;
+  font-size: 14px;
+}
+
+/* Table rows */
+td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #e7dddd;
+}
+
+/* Zebra stripe rows */
+td {
+  background-color: #000000;
+}
+
+/* Hover effect on rows */
+tr:hover {
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+/* Table headings (titles) */
+h2 {
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #fff8f8;
+}
+
+/* Button styling */
+button {
+  background-color: #28a745;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+/* Responsive table */
+@media screen and (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  th, td {
+    text-align: right;
+    padding: 10px;
+    border: none;
+  }
+  th {
+    background-color: #007bff;
+    color: #f7f7f7;
+  }
+  tr {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #bcb5b5;
+  }
+  td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    color: #2e2c2c;
+  }
+}

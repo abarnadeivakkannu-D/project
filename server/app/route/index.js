@@ -1,19 +1,15 @@
-import {
-  getAllUsers,
-  addUser ,
-  updateUser,
-  deleteUser,
-  loginUser
-} from '../controller/users.controller.js';
+import userRoute from "./user.route.js";
+import uploadRoute from "./upload.route.js";
+import companyRoute from "./company.route.js";
 
-export default function(app) {
- app.post("/api/login", loginUser);
+export default function registerRoutes(app) {
 
-  app.get('/api/getAllUsers', getAllUsers);
+  // Users Routes
+  app.use("/api/users", userRoute);
 
-   app.post('/api/addUser', addUser);  
+  // File Upload Routes
+  app.use("/api/upload", uploadRoute);
 
-  app.put('/api/updateUser/:id', updateUser);
-
-  app.delete('/api/deleteUser/:id', deleteUser);
+  // Company Routes
+  app.use("/api/company", companyRoute);
 }

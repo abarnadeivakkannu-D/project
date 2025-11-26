@@ -1,0 +1,34 @@
+<div class="company-users-wrapper">
+    <h2>Users of Company: {{ companyId }}</h2>
+
+    <!-- Error message -->
+    <p *ngIf="error" style="color:red">{{ error }}</p>
+
+    <!-- Loading message -->
+    <p *ngIf="loading">Loading users...</p>
+
+    <!-- Users table -->
+    <table border="1" width="100%" *ngIf="users.length > 0 && !loading">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile Number</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users; index as i">
+                <td>{{ i + 1 }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.mobile_number }}</td>
+                <td>{{ user.status === 1 ? 'Active' : 'Inactive' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- No users message -->
+    <p *ngIf="users.length === 0 && !loading">No users found for this company.</p>
+</div>

@@ -190,4 +190,27 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ status: 500, reason: "Error deleting user" });
   }
 };
+ export const uploadBranch = async (req, res) => {
+   try {
+     if (!req.file) {
+       return res.status(400).json({
+         status: 400,
+         reason: "No file uploaded"
+       });
+     }
 
+     return res.status(200).json({
+       status: 200,
+       reason: "File uploaded successfully",
+       fileName: req.file.filename,
+       filePath: req.file.path
+     });
+
+   } catch (error) {
+     console.error("Upload error:", error);
+     return res.status(500).json({
+       status: 500,
+       reason: "Server error during file upload"
+     });
+   }
+ };

@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -21,9 +21,9 @@ export class LoginComponent {
   username = '';
   password = '';
 
-  constructor(private router: Router, private http: HttpClient, private authService: AuthService) {}
+  constructor(private router: Router, private http: HttpClient, private authService: AuthService) { }
 
-    ngOnInit() {
+  ngOnInit() {
     // Redirect if already logged in
     if (this.authService.getLoginStatus()) {
       this.router.navigateByUrl('/dashboard/home');
@@ -37,23 +37,23 @@ export class LoginComponent {
 
     this.loading = true;
 
-    this.http.post<any>("http://localhost:3001/api/login", { username: this.username, password: this.password })
+    this.http.post<any>("http://localhost:3000/api/users/login", { username: this.username, password: this.password })
       .subscribe({
         next: (res) => {
           this.loading = false;
           console.log("Login response:", res);
           if (res.status === 200) {
-          this.authService.setLoginStatus(true)
+            this.authService.setLoginStatus(true)
             localStorage.setItem('user', JSON.stringify(res.results));
-                console.log("Navigating to dashboard/home");
-            this.router.navigateByUrl("/dashboard/home").then (success=>{
-                console.log("Navigation success:", success);
-        }).catch(err => {
-          console.error("Navigation error:", err);
-        });
+            console.log("Navigating to dashboard/home");
+            this.router.navigateByUrl("/dashboard/home").then(success => {
+              console.log("Navigation success:", success);
+            }).catch(err => {
+              console.error("Navigation error:", err);
+            });
 
-            
-            
+
+
           } else {
             alert(res.reason || "User not found");
           }

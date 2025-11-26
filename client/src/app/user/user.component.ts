@@ -52,7 +52,7 @@ export class UserComponent implements OnInit {
   fetchUsers() {
     this.loading = true;
 
-    this.http.get<any>('http://localhost:3001/api/getAllUsers').subscribe(
+    this.http.get<any>('http://localhost:3000/api/Users').subscribe(
       res => {
         this.loading = false;
         if (res.status === 200) {
@@ -93,7 +93,7 @@ export class UserComponent implements OnInit {
     if (this.isEditMode) {
       // UPDATE USER
       this.http.put<any>(
-        `http://localhost:3001/api/updateUser/${this.userFormData.id}`,
+        `http://localhost:3000/api/users/updateUser/${this.userFormData.id}`,
         this.userFormData
       ).subscribe(
         res => {
@@ -109,7 +109,7 @@ export class UserComponent implements OnInit {
 
     } else {
       // CREATE USER
-      this.http.post<any>('http://localhost:3001/api/addUser', this.userFormData)
+      this.http.post<any>('http://localhost:3000/api/users/addUser', this.userFormData)
         .subscribe(
           res => {
             if (res.status === 201) {
@@ -130,7 +130,7 @@ export class UserComponent implements OnInit {
   deleteUser(id: number) {
     if (!confirm('Are you sure you want to delete this user?')) return;
 
-    this.http.delete<any>(`http://localhost:3001/api/deleteUser/${id}`).subscribe(
+    this.http.delete<any>(`http://localhost:3000/api/users/deleteUser/${id}`).subscribe(
       res => {
         if (res.status === 200) {
           alert('User deleted successfully');

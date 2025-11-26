@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: white;
+  background-color: #f3f4f6;
 }
 
 /* Topbar */
@@ -21,7 +21,7 @@
   align-items: center;
   height: 70px;
   padding: 0 30px;
-  background-color: #6dd2dc;
+  background-color: #12c4c7;
   color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
@@ -33,7 +33,7 @@
 
 .topbar button {
   padding: 8px 16px;
-  background-color: #0c8520;
+  background-color: #4eb15e;
   color: #ffffff;
   border: none;
   border-radius: 6px;
@@ -43,7 +43,7 @@
 }
 
 .topbar button:hover {
-  background-color: #046d1e;
+  background-color: #06691f;
 }
 
 /* Layout wrapper */
@@ -56,8 +56,8 @@
 /* Sidebar */
 .sidebar {
   width: 240px;
-  background-color: #5066ac;
-  color: #e5e7eb;
+  background-color: #0b348d;
+  color: #73829f;
   padding: 20px 0;
   display: flex;
   flex-direction: column;
@@ -74,7 +74,7 @@
 
 .sidebar a {
   text-decoration: none;
-  color: #9ca3af;
+  color: white;
   font-size: 15px;
   display: flex;
   align-items: center;
@@ -89,13 +89,13 @@
 }
 
 .sidebar a:hover {
-  background-color: #2f5892;
+  background-color: #398a98;
   color: #ffffff;
 }
 
 .sidebar a.active {
-  background-color: white;
-  color: rgb(19, 19, 19);
+  background-color:#000000;
+  color: white;
   border-left: 4px solid #7eb108;
 }
 
@@ -103,9 +103,19 @@
 .main-content {
   flex: 1;
   padding: 25px;
-  background-color:black;
+  background-color: #4d4040;
   overflow-y: auto;
   border-top-left-radius: 12px;
+}
+
+.active-menu > .menu-title {
+  background: #1976d2;
+  color: white;
+}
+
+.submenu a.active {
+  color: #2d7476;
+  font-weight: bold;
 }
 
 /* Custom Scrollbar */
@@ -114,7 +124,7 @@
 }
 
 .main-content::-webkit-scrollbar-thumb {
-  background-color: #43398f;
+  background-color: #cbd5e1;
   border-radius: 4px;
 }
 

@@ -5,21 +5,34 @@ import { UserComponent } from './user/user.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 
+// New components (you will create them)
+import { CompanyListComponent } from './company/company-list/company-list.component';
+import { CompanyUsersComponent } from './company/company-users/company-users.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
 
-  // Dashboard layout with child routes
-  { 
-    path: 'dashboard', 
+  {
+    path: 'dashboard',
     component: DashboardComponent,
-    canActivate:[AuthGuard],
+    canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
+
+      /** HOME PAGE */
       { path: 'home', component: HomeComponent },
-      { path: 'users', component: UserComponent }
+
+      /** ALL USER LIST */
+      { path: 'users', component: UserComponent },
+
+      /** COMPANY LIST */
+      { path: 'company-list', component: CompanyListComponent },
+
+      /** USERS OF A SELECTED COMPANY */
+      { path: 'company-users/:id', component: CompanyUsersComponent }
     ]
   },
 
-  { path: '**', redirectTo: 'login' } 
+  { path: '**', redirectTo: 'login' }
 ];

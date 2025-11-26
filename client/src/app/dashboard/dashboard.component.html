@@ -2,7 +2,7 @@
 
   <!-- Topbar -->
   <div class="topbar">
-    <h2>My Client</h2>
+    <h2>My client</h2>
     <button (click)="logout()">Logout</button>
   </div>
 
@@ -12,6 +12,8 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <ul>
+
+        <!-- HOME -->
         <li>
           <a routerLink="/dashboard/home" routerLinkActive="active">
             <div style="padding: 10px;">
@@ -20,20 +22,70 @@
             </div>
           </a>
         </li>
+
+        <!-- COMPANY MENU -->
+        <li class="has-submenu">
+          <a routerLink="/dashboard/company" routerLinkActive="active">
+            <div style="padding: 10px;">
+              <fa-icon [icon]="faUsers" style="margin-right: 8px;"></fa-icon>
+              <span>Company</span>
+            </div>
+          </a>
+
+          <!-- SUBMENU -->
+          <ul class="submenu">
+
+            <!-- COMPANY LIST (same route as parent, NO SPACE) -->
+            <li>
+              <a routerLink="/dashboard/company-list" routerLinkActive="active">
+                <div style="padding: 10px 10px 10px 40px;">Company List</div>
+              </a>
+            </li>
+
+            <!-- USERS OF COMPANY -->
+            <li>
+              <a routerLink="/dashboard/company-users" routerLinkActive="active">
+                <div style="padding: 10px 10px 10px 40px;">Users of Company</div>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+
+        <!-- ALL USERS LIST -->
         <li>
           <a routerLink="/dashboard/users" routerLinkActive="active">
             <div style="padding: 10px;">
               <fa-icon [icon]="faUsers" style="margin-right: 8px;"></fa-icon>
-              <span>UserList</span>
+              <span>User List</span>
             </div>
           </a>
         </li>
+
+        <!-- FILE UPLOAD -->
+        <li>
+          <div style="padding: 20px;">
+            <fa-icon [icon]="faUpload" style="margin-right: 8px;"></fa-icon>
+            <span style="font-weight: 550;">Upload File</span>
+          </div>
+
+          <div style="padding-left: 50px; margin-top: 9px;">
+            <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="file"
+              url="http://localhost:3001/api/users/uploads" accept="image/*" maxFileSize="1000000"
+              (onUpload)="onUpload($event)" (onError)="onUploadError($event)">
+            </p-fileupload>
+
+            <p-button label="Upload" (click)="fu.upload()" class="p-button-secondary" [style]="{'margin-top': '8px'}">
+            </p-button>
+          </div>
+        </li>
+
       </ul>
     </div>
 
     <!-- Main content -->
     <div class="main-content">
-      <router-outlet></router-outlet> <!-- Child routes render here -->
+      <router-outlet></router-outlet>
     </div>
 
   </div>

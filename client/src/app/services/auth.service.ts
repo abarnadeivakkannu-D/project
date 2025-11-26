@@ -5,19 +5,18 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
 
-  constructor() {}
-
   setLoginStatus(status: boolean) {
-    localStorage.setItem('loggedIn', status ? 'true' : 'false'); 
+    localStorage.setItem('isLoggedIn', String(status));
   }
 
   getLoginStatus(): boolean {
-    return localStorage.getItem('loggedIn')==='true';
+    return localStorage.getItem('isLoggedIn') === 'true';
   }
 
   logout() {
-    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user');
   }
 }
+
 
