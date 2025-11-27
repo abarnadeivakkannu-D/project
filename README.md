@@ -26,5 +26,5 @@ This project is a full-stack CRUD (Create, Read, Update, Delete) application dev
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/nithyaranijanarthanan/project1.git
+git clone https://github.com/abarnadeivakkannu-D.project.git
 cd project1
