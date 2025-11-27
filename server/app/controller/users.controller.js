@@ -6,7 +6,7 @@ import {
 const users = db.users;
 
 // =============================
-// LOGIN
+// LOGIN (supports username OR email)
 // =============================
 export const loginUser = async (req, res) => {
   const {
@@ -17,7 +17,7 @@ export const loginUser = async (req, res) => {
   if (!username || !password) {
     return res.status(400).json({
       status: 400,
-      reason: "username and password are required",
+      reason: "username/email and password are required",
     });
   }
 
@@ -26,11 +26,17 @@ export const loginUser = async (req, res) => {
   try {
     const user = await users.findOne({
       where: {
-        name: username,
+        [Op.or]: [{
+            name: username
+          },
+          {
+            email: username
+          }
+        ],
         password,
         status: {
           [Op.in]: [0, 1]
-        },
+        }
       },
       transaction: t,
     });
@@ -65,8 +71,6 @@ export const loginUser = async (req, res) => {
 // GET ALL USERS
 // =============================
 export const getAllUsers = async (req, res) => {
-  console.log("Inside getAllUsers");
-
   const t = await db.sequelize.transaction();
 
   try {
@@ -74,7 +78,7 @@ export const getAllUsers = async (req, res) => {
       where: {
         status: {
           [Op.in]: [0, 1]
-        },
+        }
       },
       transaction: t,
     });
@@ -82,10 +86,6 @@ export const getAllUsers = async (req, res) => {
     const userData = queryRes.map((user) => user.get({
       plain: true
     }));
-    console.log("fetched users:", userData.map((u) => ({
-      id: u.id
-    })));
-
     await t.commit();
 
     if (userData.length > 0) {
@@ -95,24 +95,20 @@ export const getAllUsers = async (req, res) => {
         results: userData
       });
     } else {
-      res
-        .status(404)
-        .json({
-          status: 404,
-          reason: "No data found",
-          results: []
-        });
+      res.status(404).json({
+        status: 404,
+        reason: "No data found",
+        results: []
+      });
     }
   } catch (err) {
     await t.rollback();
     console.error("Error fetching users:", err);
-    res
-      .status(500)
-      .json({
-        status: 500,
-        reason: "Error fetching users",
-        results: []
-      });
+    res.status(500).json({
+      status: 500,
+      reason: "Error fetching users",
+      results: []
+    });
   }
 };
 
@@ -142,7 +138,7 @@ export const addUser = async (req, res) => {
       name,
       email,
       password,
-      status: status ?? 0,
+      status: status ?? 0
     }, {
       transaction: t
     });
@@ -171,7 +167,7 @@ export const addUser = async (req, res) => {
     return res.status(500).json({
       status: 500,
       reason: "Error creating user",
-      results: [],
+      results: []
     });
   }
 };
@@ -184,13 +180,12 @@ export const updateUser = async (req, res) => {
     id
   } = req.params;
   const updateData = req.body;
-
   const t = await db.sequelize.transaction();
+
   try {
     const user = await users.findByPk(id, {
       transaction: t
     });
-
     if (!user) {
       await t.commit();
       return res.status(404).json({
@@ -207,7 +202,7 @@ export const updateUser = async (req, res) => {
     res.json({
       status: 200,
       reason: "User updated successfully",
-      results: user,
+      results: user
     });
   } catch (err) {
     await t.rollback();
@@ -226,13 +221,12 @@ export const deleteUser = async (req, res) => {
   const {
     id
   } = req.params;
-
   const t = await db.sequelize.transaction();
+
   try {
     const user = await users.findByPk(id, {
       transaction: t
     });
-
     if (!user) {
       await t.commit();
       return res.status(404).json({
@@ -253,12 +247,10 @@ export const deleteUser = async (req, res) => {
   } catch (err) {
     await t.rollback();
     console.error("Error deleting user:", err);
-    res
-      .status(500)
-      .json({
-        status: 500,
-        reason: "Error deleting user"
-      });
+    res.status(500).json({
+      status: 500,
+      reason: "Error deleting user"
+    });
   }
 };
 
@@ -270,7 +262,7 @@ export const uploadBranch = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         status: 400,
-        reason: "No file uploaded",
+        reason: "No file uploaded"
       });
     }
 
@@ -284,19 +276,18 @@ export const uploadBranch = async (req, res) => {
     console.error("Upload error:", error);
     return res.status(500).json({
       status: 500,
-      reason: "Server error during file upload",
+      reason: "Server error during file upload"
     });
   }
 };
 
 // =============================
-// PAGINATION (NEW CODE ADDED)
+// PAGINATION
 // =============================
 export const getPaginatedUsers = async (req, res) => {
   try {
     let page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
-
     let offset = (page - 1) * limit;
 
     const {
@@ -306,24 +297,24 @@ export const getPaginatedUsers = async (req, res) => {
       where: {
         status: {
           [Op.in]: [0, 1]
-        },
+        }
       },
-      offset: offset,
-      limit: limit,
+      offset,
+      limit,
     });
 
     return res.json({
       status: 200,
       total: count,
-      page: page,
-      limit: limit,
+      page,
+      limit,
       users: rows,
     });
   } catch (error) {
     console.error("Pagination error:", error);
     return res.status(500).json({
       status: 500,
-      reason: "Error fetching paginated users",
+      reason: "Error fetching paginated users"
     });
   }
 };
